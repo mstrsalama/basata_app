@@ -13,7 +13,7 @@ def get_connection():
         password='ingy01208320446',
         database='sql7789263',
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.Cursor  # ← Cursor عادي مش DictCursor
+        cursorclass=pymysql.cursors.DictCursor  # ← Cursor عادي مش DictCursor
     )
 
 # ========== صفحات HTML ==========
