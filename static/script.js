@@ -195,28 +195,30 @@ if (name.split(" ").filter(word => word.trim() !== "").length < 4) {
   }
 
   const savedRecords = JSON.parse(localStorage.getItem("students") || "[]");
-  fetch("https://basata-app.onrender.com/check_name", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ name, guardianPhone })
-})
-.then(res => res.json())
-.then(response => {
-  if (response.exists) {
-    warning.textContent = "هذا الاسم مسجل من قبل.";
-    warning.style.display = "block";
-    return;
-  }
-
-  // استكمال التسجيل هنا بعد التأكد إن الاسم مش مكرر
   proceedWithSubmission(data, savedRecords);
-;  // ← ننقل باقي الكود هنا في دالة مستقلة
-})
-.catch(err => {
-  console.error("خطأ في التحقق من الاسم:", err);
-  warning.textContent = "⚠️ حدث خطأ أثناء التحقق من الاسم. حاول مرة أخرى.";
-  warning.style.display = "block";
-});
+
+//   fetch("https://basata-app.onrender.com/check_name", {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   body: JSON.stringify({ name, guardianPhone })
+// })
+// .then(res => res.json())
+// .then(response => {
+//   if (response.exists) {
+//     warning.textContent = "هذا الاسم مسجل من قبل.";
+//     warning.style.display = "block";
+//     return;
+//   }
+
+//   // استكمال التسجيل هنا بعد التأكد إن الاسم مش مكرر
+//   proceedWithSubmission(data, savedRecords);
+// ;  // ← ننقل باقي الكود هنا في دالة مستقلة
+// })
+// .catch(err => {
+//   console.error("خطأ في التحقق من الاسم:", err);
+//   warning.textContent = "⚠️ حدث خطأ أثناء التحقق من الاسم. حاول مرة أخرى.";
+//   warning.style.display = "block";
+// });
 
 
   const samePhoneCount = savedRecords.filter(entry => entry.guardianPhone === guardianPhone).length;
