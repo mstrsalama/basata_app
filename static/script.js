@@ -195,38 +195,8 @@ if (name.split(" ").filter(word => word.trim() !== "").length < 4) {
   }
 
   const savedRecords = JSON.parse(localStorage.getItem("students") || "[]");
-  proceedWithSubmission(data, savedRecords);
-
-//   fetch("https://basata-app.onrender.com/check_name", {
-//   method: "POST",
-//   headers: { "Content-Type": "application/json" },
-//   body: JSON.stringify({ name, guardianPhone })
-// })
-// .then(res => res.json())
-// .then(response => {
-//   if (response.exists) {
-//     warning.textContent = "هذا الاسم مسجل من قبل.";
-//     warning.style.display = "block";
-//     return;
-//   }
-
-//   // استكمال التسجيل هنا بعد التأكد إن الاسم مش مكرر
-//   proceedWithSubmission(data, savedRecords);
-// ;  // ← ننقل باقي الكود هنا في دالة مستقلة
-// })
-// .catch(err => {
-//   console.error("خطأ في التحقق من الاسم:", err);
-//   warning.textContent = "⚠️ حدث خطأ أثناء التحقق من الاسم. حاول مرة أخرى.";
-//   warning.style.display = "block";
-// });
-
-
-  const samePhoneCount = savedRecords.filter(entry => entry.guardianPhone === guardianPhone).length;
-  if (samePhoneCount >= 3) {
-    warning.textContent = "تم استخدام هذا الرقم أكثر من 3 مرات. لا يمكنك التسجيل.";
-    warning.style.display = "block";
-    return;
-  }
+  const selectedDay = document.getElementById("days").value;
+const selectedTime = document.getElementById("timeOptions").value;
 
   const data = {
   name, studentPhone, guardianPhone, whatsappPhone,
@@ -242,6 +212,56 @@ if (data.siblings === "ليا إخوات") {
   data.siblingGrade = document.getElementById("siblingGrade").value || "";
 }
 
+fetch("/check_name", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ name, guardianPhone })
+})
+.then(res => {
+  // ✅ أولاً نتحقق إن الرد من السيرفر سليم
+  if (!res.ok) {
+    throw new Error("HTTP status " + res.status);
+  }
+  return res.json();
+})
+.then(response => {
+  console.log("🔍 رد السيرفر في التحقق من الاسم:", response); // ← سطر التتبع
+
+  if (response.error) {
+    warning.textContent = "⚠️ خطأ من السيرفر: " + response.error;
+    warning.style.display = "block";
+    return;
+  }
+
+  if (response.exists) {
+    warning.textContent = "❗ هذا الاسم مسجل من قبل.";
+    warning.style.display = "block";
+    return;
+  }
+
+  // ✅ الاسم غير مكرر - كمل التسجيل
+  if (subscriptionType !== "center") {
+    proceedWithSubmission(data, savedRecords);
+}
+
+})
+.catch(err => {
+  console.error("❌ خطأ في التحقق من الاسم:", err); // ← طباعة الخطأ كاملة
+  warning.textContent = "⚠️ حدث خطأ أثناء التحقق من الاسم. حاول مرة أخرى.";
+  warning.style.display = "block";
+});
+
+
+
+  const samePhoneCount = savedRecords.filter(entry => entry.guardianPhone === guardianPhone).length;
+  if (samePhoneCount >= 3) {
+    warning.textContent = "تم استخدام هذا الرقم أكثر من 3 مرات. لا يمكنك التسجيل.";
+    warning.style.display = "block";
+    return;
+  }
+
+
+
 
   if (subscriptionType === "center") {
     const selectedTime = document.getElementById("timeOptions").value;
@@ -254,7 +274,7 @@ if (data.siblings === "ليا إخوات") {
     const selectedDay = document.getElementById("days").value;
     const isExempted = (grade === "2ثانوي") || (grade === "1ثانوي" && gender === "ولد");
 
-    fetch("https://basata-app.onrender.com/count_students", {
+    fetch("/count_students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ grade, gender, days: selectedDay, time: selectedTime })
@@ -270,26 +290,15 @@ if (data.siblings === "ليا إخوات") {
         }
         if (count >= 30) alert("⚠️ هذا الموعد اقترب من الامتلاء (30 من 40). يُفضل اختيار موعد آخر.");
       }
-      data.days = selectedDay;
-      data.time = selectedTime;
-      data.siblings = document.querySelector('input[name="siblings"]:checked')?.value || "غير محدد";
-      if (data.siblings === "ليا إخوات") { data.siblingName = document.getElementById("siblingName").value.trim() || ""; data.siblingGrade = document.getElementById("siblingGrade").value || ""; }
-      data.hafiz = document.getElementById("hafiz").checked;
-      data.fatherDeceased = document.getElementById("fatherDeceased").checked;
+      proceedWithSubmission(data, savedRecords);
 
-      const submitBtn = document.getElementById("submitBtn");
-      submitBtn.disabled = true;
-      submitBtn.textContent = "جارٍ الحفظ...";
-
-      setTimeout(() => window.location.href = "confirm.html", 1500);
     })
     .catch(err => { warning.textContent = "⚠️ حدث خطأ أثناء التحقق من عدد المسجلين."; warning.style.display = "block"; console.error(err); });
 
     return;
   }
 
-  localStorage.setItem("currentStudent", JSON.stringify(data));
-  localStorage.setItem("students", JSON.stringify([...savedRecords, data]));
+
 
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
