@@ -13,7 +13,7 @@ def get_connection():
         password='ingy01208320446',
         database='sql7789263',
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor  # ← Cursor عادي مش DictCursor
+        cursorclass=pymysql.cursors.Cursor  # ← Cursor عادي مش DictCursor
     )
 
 # ========== صفحات HTML ==========
@@ -102,7 +102,7 @@ def count_students():
         cur.close()
         conn.close()
 
-        count = result['count'] if result else 0
+        count = result[0] if result else 0
         return jsonify({"count": count})
     except Exception as e:
         print("❌ Error in /count_students:", e)
@@ -129,7 +129,7 @@ def check_name():
         cur.close()
         conn.close()
 
-        exists = result['count'] > 0 if result else False
+        exists = result[0] > 0 if result else False
         return jsonify({"exists": exists})
     except Exception as e:
         print("❌ Error in /check_name:", e)
