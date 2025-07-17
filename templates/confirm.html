@@ -103,11 +103,17 @@
   </div>
 
   <script>
+
+
+
+
     const data = JSON.parse(localStorage.getItem("currentStudent"));
 
     if (!data) {
-      document.getElementById("studentData").innerHTML = "<tr><td colspan='2'>لا توجد بيانات لعرضها.</td></tr>";
-    } else {
+      alert("⚠️ لا توجد بيانات لعرضها. برجاء التسجيل أولاً.");
+      window.location.href = "index.html";
+    }
+    else {
       const table = document.getElementById("studentData");
       const isTelegramOnly = data.subscriptionType === "telegram";
 
@@ -156,7 +162,7 @@ rows.forEach(([label, value]) => {
   const data = JSON.parse(localStorage.getItem("currentStudent"));
 
   // إرسال البيانات إلى باك إند Flask
-  fetch("https://basata-app.onrender.com/register", {
+  fetch("/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
