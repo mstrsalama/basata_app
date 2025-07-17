@@ -13,7 +13,7 @@ def get_connection():
         password='ingy01208320446',
         database='sql7789263',
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.Cursor  # ← Cursor عادي مش DictCursor
+        cursorclass=pymysql.cursors.DictCursor  # ← Cursor عادي مش DictCursor
     )
 
 # ========== صفحات HTML ==========
@@ -42,7 +42,8 @@ def register_student():
             SELECT COUNT(*) FROM students WHERE name = %s AND guardian_phone = %s
         """, (data['name'], data['guardianPhone']))
         result = cur.fetchone()
-        if result and result['count'] > 0:
+        if result and list(result.values())[0] > 0:
+
             cur.close()
             conn.close()
             return jsonify({'error': 'هذا الطالب مسجل بالفعل بهذا الرقم'}), 409
@@ -102,7 +103,8 @@ def count_students():
         cur.close()
         conn.close()
 
-        count = result[0] if result else 0
+        count = list(result.values())[0] if result else 0
+
         return jsonify({"count": count})
     except Exception as e:
         print("❌ Error in /count_students:", e)
@@ -126,14 +128,19 @@ def check_name():
             WHERE name = %s AND guardian_phone = %s
         """, (name, guardian_phone))
         result = cur.fetchone()
+
+        print("نتيجة الاستعلام:", result)  # ← أضف هذا السطر
+
         cur.close()
         conn.close()
 
-        exists = result[0] > 0 if result else False
+        exists = list(result.values())[0] > 0 if result else False
+
         return jsonify({"exists": exists})
     except Exception as e:
         print("❌ Error in /check_name:", e)
         return jsonify({'error': str(e)}), 500
+
 
 # ========== تشغيل التطبيق ==========
 if __name__ == '__main__':
