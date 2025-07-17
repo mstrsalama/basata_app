@@ -212,7 +212,7 @@ if (data.siblings === "ليا إخوات") {
   data.siblingGrade = document.getElementById("siblingGrade").value || "";
 }
 
-fetch("https://basata-app.onrender.com/check_name", {
+fetch("/check_name", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ name, guardianPhone })
@@ -274,7 +274,7 @@ fetch("https://basata-app.onrender.com/check_name", {
     const selectedDay = document.getElementById("days").value;
     const isExempted = (grade === "2ثانوي") || (grade === "1ثانوي" && gender === "ولد");
 
-    fetch("https://basata-app.onrender.com/count_students", {
+    fetch("/count_students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ grade, gender, days: selectedDay, time: selectedTime })
