@@ -68,10 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // توابع المساعدة:
   function getStartDay(grade, days) {
     const lower = days.toLowerCase();
-    if (grade === "3اعدادي") return "يوم الإثنين الموافق 16 / 8";
-    if (lower.includes("سبت")) return "يوم السبت الموافق 14 / 8";
-    if (lower.includes("حد")) return "يوم الأحد الموافق 15 / 8";
-    if (lower.includes("اتنين")) return "يوم الإثنين الموافق 16 / 8";
+    if (grade === "3اعدادي") return "يوم الإثنين الموافق 11 / 8";
+    if (lower.includes("سبت")) return "يوم السبت الموافق 9 / 8";
+    if (lower.includes("حد")) return "يوم الأحد الموافق 10 / 8";
+    if (lower.includes("اتنين")) return "يوم الإثنين الموافق 11 / 8";
     return "بداية قريبة - سيتم إعلامك بالتفاصيل";
   }
 
