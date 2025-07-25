@@ -253,12 +253,12 @@ fetch("/check_name", {
 
 
 
-  const samePhoneCount = savedRecords.filter(entry => entry.guardianPhone === guardianPhone).length;
-  if (samePhoneCount >= 3) {
-    warning.textContent = "تم استخدام هذا الرقم أكثر من 3 مرات. لا يمكنك التسجيل.";
-    warning.style.display = "block";
-    return;
-  }
+  // const samePhoneCount = savedRecords.filter(entry => entry.guardianPhone === guardianPhone).length;
+  // if (samePhoneCount >= 3) {
+  //   warning.textContent = "تم استخدام هذا الرقم أكثر من 3 مرات. لا يمكنك التسجيل.";
+  //   warning.style.display = "block";
+  //   return;
+  // }
 
 
 
