@@ -288,7 +288,7 @@ fetch("/check_name", {
           warning.style.display = "block";
           return;
         }
-        if (count >= 30) alert("⚠️ هذا الموعد اقترب من الامتلاء (30 من 40). يُفضل اختيار موعد آخر.");
+        if (count >= 30) alert("⚠️ هذا الموعد اقترب من الامتلاء . يُفضل اختيار موعد آخر.");
       }
       proceedWithSubmission(data, savedRecords);
 
