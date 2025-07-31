@@ -9,9 +9,9 @@ CORS(app)
 def get_connection():
     return pymysql.connect(
         host='sql7.freesqldatabase.com',
-        user='sql7791695',
+        user='sql7792936',
         password='ingy01208320446',
-        database='sql7791695',
+        database='sql7792936',
         charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor  # ← Cursor عادي مش DictCursor
     )
